@@ -45,9 +45,10 @@ public class ContatoService {
                 .toList();
     }
 
+    @Transactional
     public ContatoResponse registrarResultado(RegistrarContatoRequest request) {
         ProcedimentoPaciente pp = procedimentoPacienteRepository
-                .findById(request.getProcedimentoPacienteId())
+                .findByIdWithProcedimento(request.getProcedimentoPacienteId())
                 .orElseThrow(() -> new RuntimeException("Registro não encontrado"));
 
         Usuario secretaria = usuarioLogado();

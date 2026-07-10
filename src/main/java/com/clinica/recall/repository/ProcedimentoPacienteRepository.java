@@ -3,9 +3,11 @@ package com.clinica.recall.repository;
 import com.clinica.recall.domain.entity.ProcedimentoPaciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ProcedimentoPacienteRepository extends JpaRepository<ProcedimentoPaciente, Long> {
@@ -26,4 +28,7 @@ public interface ProcedimentoPacienteRepository extends JpaRepository<Procedimen
         ORDER BY pp.dataProximoContato ASC
     """)
     List<ProcedimentoPaciente> findPacientesParaContactar(LocalDate data);
+
+    @Query("SELECT pp FROM ProcedimentoPaciente pp JOIN FETCH pp.procedimento WHERE pp.id = :id")
+    Optional<ProcedimentoPaciente> findByIdWithProcedimento(@Param("id") Long id);
 }
