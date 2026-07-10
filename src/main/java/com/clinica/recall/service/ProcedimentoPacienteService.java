@@ -13,6 +13,7 @@ import com.clinica.recall.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -50,13 +51,14 @@ public class ProcedimentoPacienteService {
         return toResponse(procedimentoPacienteRepository.save(pp));
     }
 
-    public List<ProcedimentoPacienteResponse> listarPorPaciente(UUID pacienteId) {
+    public List<ProcedimentoPacienteResponse> listarPorPaciente(Long pacienteId) {
         return procedimentoPacienteRepository.findByPacienteId(pacienteId)
                 .stream()
                 .map(this::toResponse)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<ProcedimentoPacienteResponse> listarParaContactarHoje() {
         return procedimentoPacienteRepository
                 .findPacientesParaContactar(LocalDate.now())

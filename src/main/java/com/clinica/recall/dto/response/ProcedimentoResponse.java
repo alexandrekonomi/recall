@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public class ProcedimentoResponse {
-    private UUID id;
+    private Long id;
     private String nome;
     private String descricao;
     private Integer intervaloRetornoDias;

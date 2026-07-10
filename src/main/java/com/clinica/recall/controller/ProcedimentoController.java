@@ -34,20 +34,20 @@ public class ProcedimentoController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('MEDICO', 'SECRETARIA')")
-    public ResponseEntity<ProcedimentoResponse> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<ProcedimentoResponse> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(procedimentoService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MEDICO')")
-    public ResponseEntity<ProcedimentoResponse> atualizar(@PathVariable UUID id,
+    public ResponseEntity<ProcedimentoResponse> atualizar(@PathVariable Long id,
                                                           @Valid @RequestBody ProcedimentoRequest request) {
         return ResponseEntity.ok(procedimentoService.atualizar(id, request));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('MEDICO')")
-    public ResponseEntity<Void> desativar(@PathVariable UUID id) {
+    public ResponseEntity<Void> desativar(@PathVariable Long id) {
         procedimentoService.desativar(id);
         return ResponseEntity.noContent().build();
     }

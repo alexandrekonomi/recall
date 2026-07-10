@@ -42,13 +42,13 @@ public class ProcedimentoService {
                 .toList();
     }
 
-    public ProcedimentoResponse buscarPorId(UUID id) {
+    public ProcedimentoResponse buscarPorId(Long id) {
         return procedimentoRepository.findById(id)
                 .map(this::toResponse)
                 .orElseThrow(() -> new RuntimeException("Procedimento não encontrado"));
     }
 
-    public ProcedimentoResponse atualizar(UUID id, ProcedimentoRequest request) {
+    public ProcedimentoResponse atualizar(Long id, ProcedimentoRequest request) {
         Procedimento procedimento = procedimentoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Procedimento não encontrado"));
 
@@ -60,7 +60,7 @@ public class ProcedimentoService {
         return toResponse(procedimentoRepository.save(procedimento));
     }
 
-    public void desativar(UUID id) {
+    public void desativar(Long id) {
         Procedimento procedimento = procedimentoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Procedimento não encontrado"));
         procedimento.setAtivo(false);

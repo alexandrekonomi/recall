@@ -16,9 +16,8 @@ import java.util.UUID;
 public class ProcedimentoPaciente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
@@ -34,7 +33,7 @@ public class ProcedimentoPaciente {
     private LocalDate dataProximoContato;
 
     @Column(name = "registrado_por_id")
-    private UUID registradoPorId;
+    private Long registradoPorId;
 
     @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;

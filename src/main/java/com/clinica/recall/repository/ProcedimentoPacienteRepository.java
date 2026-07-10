@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-public interface ProcedimentoPacienteRepository extends JpaRepository<ProcedimentoPaciente, UUID> {
+public interface ProcedimentoPacienteRepository extends JpaRepository<ProcedimentoPaciente, Long> {
 
-    List<ProcedimentoPaciente> findByPacienteId(UUID pacienteId);
+    List<ProcedimentoPaciente> findByPacienteId(Long pacienteId);
 
     @Query("""
         SELECT pp FROM ProcedimentoPaciente pp

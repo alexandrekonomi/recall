@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public class PacienteResponse {
-    private UUID id;
+    private Long id;
     private String nome;
     private String telefone;
     private LocalDate dataNascimento;

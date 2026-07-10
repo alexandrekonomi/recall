@@ -1,5 +1,6 @@
 package com.clinica.recall.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -10,11 +11,12 @@ import java.util.UUID;
 public class ProcedimentoPacienteRequest {
 
     @NotNull
-    private UUID pacienteId;
+    private Long pacienteId;
 
     @NotNull
-    private UUID procedimentoId;
+    private Long procedimentoId;
 
     @NotNull
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataRealizacao;
 }

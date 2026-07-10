@@ -31,7 +31,7 @@ public class ProcedimentoPacienteController {
     @GetMapping("/paciente/{pacienteId}")
     @PreAuthorize("hasAnyRole('MEDICO', 'SECRETARIA')")
     public ResponseEntity<List<ProcedimentoPacienteResponse>> listarPorPaciente(
-            @PathVariable UUID pacienteId) {
+            @PathVariable Long pacienteId) {
         return ResponseEntity.ok(procedimentoPacienteService.listarPorPaciente(pacienteId));
     }
 

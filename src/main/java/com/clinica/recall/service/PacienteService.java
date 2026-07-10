@@ -40,13 +40,13 @@ public class PacienteService {
                 .toList();
     }
 
-    public PacienteResponse buscarPorId(UUID id) {
+    public PacienteResponse buscarPorId(Long id) {
         return pacienteRepository.findById(id)
                 .map(this::toResponse)
                 .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
     }
 
-    public PacienteResponse atualizar(UUID id, PacienteRequest request) {
+    public PacienteResponse atualizar(Long id, PacienteRequest request) {
         Paciente paciente = pacienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
 
@@ -61,7 +61,7 @@ public class PacienteService {
         return toResponse(pacienteRepository.save(paciente));
     }
 
-    public void desativar(UUID id) {
+    public void desativar(Long id) {
         Paciente paciente = pacienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
         paciente.setAtivo(false);

@@ -34,20 +34,20 @@ public class PacienteController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('MEDICO', 'SECRETARIA')")
-    public ResponseEntity<PacienteResponse> buscarPorId(@PathVariable UUID id) {
+    public ResponseEntity<PacienteResponse> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(pacienteService.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('MEDICO', 'SECRETARIA')")
-    public ResponseEntity<PacienteResponse> atualizar(@PathVariable UUID id,
+    public ResponseEntity<PacienteResponse> atualizar(@PathVariable Long id,
                                                       @Valid @RequestBody PacienteRequest request) {
         return ResponseEntity.ok(pacienteService.atualizar(id, request));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('MEDICO')")
-    public ResponseEntity<Void> desativar(@PathVariable UUID id) {
+    public ResponseEntity<Void> desativar(@PathVariable Long id) {
         pacienteService.desativar(id);
         return ResponseEntity.noContent().build();
     }
