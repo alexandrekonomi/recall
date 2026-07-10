@@ -1,3 +1,16 @@
 spring:
   application:
-    name: recall
+    name: clinica-reativacao
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: 8080

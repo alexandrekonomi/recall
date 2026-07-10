@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/clinica_reativacao
+    username: clinica_user
+    password: clinica_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+logging:
+  level:
+    org.springframework.jdbc: DEBUG
+    org.springframework.boot.autoconfigure.jdbc: DEBUG
