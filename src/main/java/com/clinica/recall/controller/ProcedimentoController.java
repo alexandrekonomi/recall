@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/procedimentos")
+    @RequestMapping("/procedimentos")
 @RequiredArgsConstructor
 public class ProcedimentoController {
 

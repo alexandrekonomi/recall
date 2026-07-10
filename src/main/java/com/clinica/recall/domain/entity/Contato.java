@@ -28,12 +28,13 @@ public class Contato {
     private ProcedimentoPaciente procedimentoPaciente;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "realizado_por_id", nullable = false)
+    @JoinColumn(name = "realizado_por_id")
     private Usuario realizadoPor;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "resultado")
-    private ResultadoContato resultado;
+    @Column(name = "status", nullable = false)
+    @Builder.Default
+    private ResultadoContato status = ResultadoContato.PENDENTE;
 
     @Column(name = "mensagem_enviada", columnDefinition = "TEXT")
     private String mensagemEnviada;
@@ -41,7 +42,7 @@ public class Contato {
     @Column(name = "observacao", columnDefinition = "TEXT")
     private String observacao;
 
-    @Column(name = "realizado_em", nullable = false, updatable = false)
+    @Column(name = "realizado_em", updatable = false)
     private LocalDateTime realizadoEm;
 
     @Column(name = "proximo_contato_em")
@@ -49,6 +50,8 @@ public class Contato {
 
     @PrePersist
     public void prePersist() {
-        this.realizadoEm = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = ResultadoContato.PENDENTE;
+        }
     }
 }
