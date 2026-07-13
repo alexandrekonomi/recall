@@ -3,6 +3,7 @@ package com.clinica.recall.controller;
 import com.clinica.recall.dto.request.RegistrarContatoRequest;
 import com.clinica.recall.dto.response.ContatoResponse;
 import com.clinica.recall.dto.response.ListaDiariaResponse;
+import com.clinica.recall.dto.response.MetricasDashboardResponse;
 import com.clinica.recall.service.ContatoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +40,11 @@ public class ContatoController {
             @PathVariable Long
                     pacienteId) {
         return ResponseEntity.ok(contatoService.listarPorPaciente(pacienteId));
+    }
+
+    @GetMapping("/metricas-hoje")
+    @PreAuthorize("hasAnyRole('MEDICO', 'SECRETARIA')")
+    public ResponseEntity<MetricasDashboardResponse> metricasHoje() {
+        return ResponseEntity.ok(contatoService.buscarMetricasHoje());
     }
 }

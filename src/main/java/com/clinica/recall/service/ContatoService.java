@@ -7,6 +7,7 @@ import com.clinica.recall.domain.enums.ResultadoContato;
 import com.clinica.recall.dto.request.RegistrarContatoRequest;
 import com.clinica.recall.dto.response.ContatoResponse;
 import com.clinica.recall.dto.response.ListaDiariaResponse;
+import com.clinica.recall.dto.response.MetricasDashboardResponse;
 import com.clinica.recall.repository.ContatoRepository;
 import com.clinica.recall.repository.ProcedimentoPacienteRepository;
 import com.clinica.recall.repository.UsuarioRepository;
@@ -115,6 +116,24 @@ public class ContatoService {
                 .observacao(c.getObservacao())
                 .realizadoEm(c.getRealizadoEm())
                 .proximoContatoEm(c.getProximoContatoEm())
+                .build();
+    }
+
+    public MetricasDashboardResponse buscarMetricasHoje() {
+        LocalDateTime inicioDia = LocalDate.now().atStartOfDay();
+        LocalDateTime fimDia = inicioDia.plusDays(1);
+
+        long aContactar = procedimentoPacienteRepository
+                .findPacientesParaContactar(LocalDate.now())
+                .size();
+
+        long contactados = contatoRepository.contarContatosHoje(inicioDia, fimDia);
+        long agendamentos = contatoRepository.contarAgendamentosHoje(inicioDia, fimDia);
+
+        return MetricasDashboardResponse.builder()
+                .pacientesAContactarHoje(aContactar)
+                .contactadosHoje(contactados)
+                .agendamentosHoje(agendamentos)
                 .build();
     }
 }

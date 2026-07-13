@@ -17,7 +17,6 @@ public class PacienteRequest {
     @NotBlank
     private String telefone;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataNascimento;
 
     private List<TagPaciente> tags;
