@@ -51,8 +51,9 @@ public class ProcedimentoPacienteService {
         return toResponse(procedimentoPacienteRepository.save(pp));
     }
 
+    @Transactional(readOnly = true)
     public List<ProcedimentoPacienteResponse> listarPorPaciente(Long pacienteId) {
-        return procedimentoPacienteRepository.findByPacienteId(pacienteId)
+        return procedimentoPacienteRepository.findByPacienteIdWithAssociations(pacienteId)
                 .stream()
                 .map(this::toResponse)
                 .toList();

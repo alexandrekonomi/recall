@@ -75,8 +75,9 @@ public class ContatoService {
         return toResponse(salvo, pp);
     }
 
+    @Transactional(readOnly = true)
     public List<ContatoResponse> listarPorPaciente(Long pacienteId) {
-        return contatoRepository.findByPacienteId(pacienteId)
+        return contatoRepository.findByPacienteIdWithAssociations(pacienteId)
                 .stream()
                 .map(c -> toResponse(c, c.getProcedimentoPaciente()))
                 .toList();

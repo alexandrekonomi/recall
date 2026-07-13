@@ -4,6 +4,7 @@ import com.clinica.recall.domain.entity.Contato;
 import com.clinica.recall.domain.enums.ResultadoContato;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,4 +30,12 @@ public interface ContatoRepository extends JpaRepository<Contato, Long> {
                 AND c.realizadoEm >= :inicioDia AND c.realizadoEm < :fimDia
             """)
     long contarAgendamentosHoje(LocalDateTime inicioDia, LocalDateTime fimDia);
+
+    // ContatoRepository.java
+    @Query("SELECT DISTINCT c FROM Contato c " +
+            "JOIN FETCH c.procedimentoPaciente pp " +
+            "JOIN FETCH pp.paciente " +
+            "JOIN FETCH pp.procedimento " +
+            "WHERE c.paciente.id = :pacienteId")
+    List<Contato> findByPacienteIdWithAssociations(@Param("pacienteId") Long pacienteId);
 }

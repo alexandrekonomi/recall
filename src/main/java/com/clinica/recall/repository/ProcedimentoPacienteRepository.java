@@ -32,4 +32,11 @@ public interface ProcedimentoPacienteRepository extends JpaRepository<Procedimen
 
     @Query("SELECT pp FROM ProcedimentoPaciente pp JOIN FETCH pp.procedimento WHERE pp.id = :id")
     Optional<ProcedimentoPaciente> findByIdWithProcedimento(@Param("id") Long id);
+
+    @Query("SELECT DISTINCT pp FROM ProcedimentoPaciente pp " +
+            "JOIN FETCH pp.paciente " +
+            "JOIN FETCH pp.procedimento " +
+            "WHERE pp.paciente.id = :pacienteId " +
+            "ORDER BY pp.dataRealizacao DESC")
+    List<ProcedimentoPaciente> findByPacienteIdWithAssociations(@Param("pacienteId") Long pacienteId);
 }

@@ -6,6 +6,7 @@ import com.clinica.recall.dto.response.PacienteResponse;
 import com.clinica.recall.repository.PacienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class PacienteService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public PacienteResponse buscarPorId(Long id) {
         return pacienteRepository.findById(id)
                 .map(this::toResponse)
