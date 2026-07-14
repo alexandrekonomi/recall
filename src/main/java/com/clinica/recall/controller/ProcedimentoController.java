@@ -51,4 +51,10 @@ public class ProcedimentoController {
         procedimentoService.desativar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/desativar/{id}")
+    @PreAuthorize("hasAnyRole('MEDICO')")
+    public ResponseEntity<ProcedimentoResponse> toggleStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(procedimentoService.toggleStatus(id));
+    }
 }

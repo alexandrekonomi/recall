@@ -83,4 +83,11 @@ public class ProcedimentoService {
                 .ativo(p.isAtivo())
                 .build();
     }
+
+    public ProcedimentoResponse toggleStatus(Long id) {
+        Procedimento procedimento = procedimentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Procedimento não encontrado"));
+        procedimento.setAtivo(!procedimento.isAtivo());
+        return toResponse(procedimentoRepository.save(procedimento));
+    }
 }
