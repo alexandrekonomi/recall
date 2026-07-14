@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProcedimentoRequest {
 
@@ -19,4 +21,6 @@ public class ProcedimentoRequest {
     private Integer intervaloRetornoDias;
 
     private String templateMensagem;
+
+    private BigDecimal valor;
 }

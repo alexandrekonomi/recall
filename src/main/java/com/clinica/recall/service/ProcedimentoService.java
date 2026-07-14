@@ -56,6 +56,7 @@ public class ProcedimentoService {
         procedimento.setDescricao(request.getDescricao());
         procedimento.setIntervaloRetornoDias(request.getIntervaloRetornoDias());
         procedimento.setTemplateMensagem(request.getTemplateMensagem());
+        procedimento.setValor(request.getValor());
 
         return toResponse(procedimentoRepository.save(procedimento));
     }
@@ -80,6 +81,7 @@ public class ProcedimentoService {
                 .descricao(p.getDescricao())
                 .intervaloRetornoDias(p.getIntervaloRetornoDias())
                 .templateMensagem(p.getTemplateMensagem())
+                .valor(p.getValor())
                 .ativo(p.isAtivo())
                 .build();
     }

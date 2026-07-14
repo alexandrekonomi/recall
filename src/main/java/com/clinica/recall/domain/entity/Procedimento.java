@@ -3,6 +3,7 @@ package com.clinica.recall.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -35,4 +36,7 @@ public class Procedimento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "criado_por_id", nullable = false)
     private Usuario criadoPor;
+
+    @Column(name = "valor", precision = 10, scale = 2)
+    private BigDecimal valor;
 }

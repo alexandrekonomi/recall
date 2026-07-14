@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -16,4 +17,5 @@ public class ProcedimentoResponse {
     private Integer intervaloRetornoDias;
     private String templateMensagem;
     private boolean ativo;
+    private BigDecimal valor;
 }
