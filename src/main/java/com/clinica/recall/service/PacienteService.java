@@ -2,7 +2,10 @@ package com.clinica.recall.service;
 
 import com.clinica.recall.domain.entity.Paciente;
 import com.clinica.recall.dto.request.PacienteRequest;
+import com.clinica.recall.dto.response.ContatoResponse;
 import com.clinica.recall.dto.response.PacienteResponse;
+import com.clinica.recall.dto.response.PerfilPacienteResponse;
+import com.clinica.recall.dto.response.ProcedimentoPacienteResponse;
 import com.clinica.recall.repository.PacienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import java.util.UUID;
 public class PacienteService {
 
     private final PacienteRepository pacienteRepository;
+    private final ContatoService contatoService;
+    private final ProcedimentoPacienteService procedimentoPacienteService;
 
     public PacienteResponse criar(PacienteRequest request) {
         pacienteRepository.findByTelefone(request.getTelefone()).ifPresent(p -> {
@@ -68,6 +73,21 @@ public class PacienteService {
                 .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
         paciente.setAtivo(false);
         pacienteRepository.save(paciente);
+    }
+
+    @Transactional(readOnly = true)
+    public PerfilPacienteResponse buscarPerfil(Long pacienteId) {
+        Paciente paciente = pacienteRepository.findById(pacienteId)
+                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+
+        List<ContatoResponse> contatos = contatoService.listarPorPaciente(pacienteId);
+        List<ProcedimentoPacienteResponse> procedimentos = procedimentoPacienteService.listarPorPaciente(pacienteId);
+
+        return PerfilPacienteResponse.builder()
+                .paciente(toResponse(paciente))
+                .contatos(contatos)
+                .procedimentos(procedimentos)
+                .build();
     }
 
     private PacienteResponse toResponse(Paciente p) {

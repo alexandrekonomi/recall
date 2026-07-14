@@ -2,6 +2,7 @@ package com.clinica.recall.controller;
 
 import com.clinica.recall.dto.request.PacienteRequest;
 import com.clinica.recall.dto.response.PacienteResponse;
+import com.clinica.recall.dto.response.PerfilPacienteResponse;
 import com.clinica.recall.service.PacienteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +51,11 @@ public class PacienteController {
     public ResponseEntity<Void> desativar(@PathVariable Long id) {
         pacienteService.desativar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/perfil")
+    @PreAuthorize("hasAnyRole('MEDICO', 'SECRETARIA')")
+    public ResponseEntity<PerfilPacienteResponse> buscarPerfil(@PathVariable Long id) {
+        return ResponseEntity.ok(pacienteService.buscarPerfil(id));
     }
 }
