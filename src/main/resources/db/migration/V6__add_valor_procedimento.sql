@@ -1,0 +1,1 @@
+ALTER TABLE procedimentos ADD COLUMN valor NUMERIC(10,2);

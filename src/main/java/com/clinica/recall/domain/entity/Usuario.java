@@ -42,4 +42,13 @@ public class Usuario {
     public void prePersist() {
         this.criadoEm = LocalDateTime.now();
     }
+
+    @Column(name = "token_convite")
+    private String tokenConvite;
+
+    @Column(name = "convite_expira_em")
+    private LocalDateTime conviteExpiraEm;
+
+    @Column(name = "convidado_por_id")
+    private Long convidadoPorId;
 }

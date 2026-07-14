@@ -15,5 +15,13 @@ jwt:
   secret: "3cTk9pLmN7vQxRsWuYzAbCdEfGhJkMnOpQrStUvWxYz12345678901234567890"
   expiration: 86400000
 
+resend:
+  api-key: re_DTdYxF9d_4FeVsdR55bKsfftf5v1iCbE8
+  from-email: onboarding@resend.dev
+  from-name: Recall
+
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+
 server:
   port: 8080

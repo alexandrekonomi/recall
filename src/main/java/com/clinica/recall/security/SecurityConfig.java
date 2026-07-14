@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/convite/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/ativar-conta").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(s -> s

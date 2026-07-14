@@ -1,21 +1,18 @@
 package com.clinica.recall.dto.response;
 
+import com.clinica.recall.domain.enums.RolePerfil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
 @Data
 @Builder
 @AllArgsConstructor
-public class ProcedimentoResponse {
+public class UsuarioResponse {
     private Long id;
     private String nome;
-    private String descricao;
-    private Integer intervaloRetornoDias;
-    private String templateMensagem;
+    private String email;
+    private RolePerfil perfil;
     private boolean ativo;
-    private BigDecimal valor;
+    private boolean contaAtivada;
 }
