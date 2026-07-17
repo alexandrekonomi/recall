@@ -4,6 +4,7 @@ import com.clinica.recall.domain.enums.ResultadoContato;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -16,4 +17,8 @@ public class RegistrarContatoRequest {
     private ResultadoContato status;
 
     private String observacao;
+
+    private Long procedimentoAgendadoId;
+
+    private LocalDate dataAgendada;
 }

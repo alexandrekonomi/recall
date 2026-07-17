@@ -28,6 +28,7 @@ public class ContatoService {
     private final ContatoRepository contatoRepository;
     private final ProcedimentoPacienteRepository procedimentoPacienteRepository;
     private final UsuarioRepository usuarioRepository;
+    private final AgendamentoService agendamentoService;
 
     @Transactional(readOnly = true)
     public List<ListaDiariaResponse> listarParaContactarHoje() {
@@ -72,6 +73,15 @@ public class ContatoService {
         }
 
         Contato salvo = contatoRepository.save(contato);
+
+        if (request.getStatus() == ResultadoContato.AGENDOU) {
+            agendamentoService.criarAPartirDoContato(
+                    salvo,
+                    request.getProcedimentoAgendadoId(),
+                    request.getDataAgendada()
+            );
+        }
+
         return toResponse(salvo, pp);
     }
 
