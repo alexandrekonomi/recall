@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
-    List<Agendamento> findByStatusOrderByCriadoEmAsc(StatusAgendamento status);
-    long countByStatus(StatusAgendamento status);
 
     // Para o completar (carrega paciente + procedimento)
     @Query("SELECT DISTINCT a FROM Agendamento a " +

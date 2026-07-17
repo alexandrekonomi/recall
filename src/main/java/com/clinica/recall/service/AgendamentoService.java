@@ -3,9 +3,11 @@ package com.clinica.recall.service;
 import com.clinica.recall.domain.entity.Agendamento;
 import com.clinica.recall.domain.entity.Contato;
 import com.clinica.recall.domain.entity.Procedimento;
+import com.clinica.recall.domain.entity.ProcedimentoPaciente;
 import com.clinica.recall.domain.enums.StatusAgendamento;
 import com.clinica.recall.dto.response.AgendamentoResponse;
 import com.clinica.recall.repository.AgendamentoRepository;
+import com.clinica.recall.repository.ProcedimentoPacienteRepository;
 import com.clinica.recall.repository.ProcedimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class AgendamentoService {
 
     private final AgendamentoRepository agendamentoRepository;
     private final ProcedimentoRepository procedimentoRepository;
+    private final ProcedimentoPacienteRepository procedimentoPacienteRepository;
 
     public Agendamento criarAPartirDoContato(Contato contato, Long procedimentoAgendadoId, LocalDate dataAgendada) {
         Procedimento procedimento = null;
@@ -48,7 +51,7 @@ public class AgendamentoService {
     }
 
     public List<AgendamentoResponse> listarAguardandoRealizacao() {
-        return agendamentoRepository.findByStatusOrderByCriadoEmAsc(StatusAgendamento.AGUARDANDO_REALIZACAO)
+        return agendamentoRepository.findByStatusWithAssociations(StatusAgendamento.AGUARDANDO_REALIZACAO)
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -87,4 +90,46 @@ public class AgendamentoService {
         agendamentoRepository.save(agendamento);
         return toResponse(agendamento);
     }
+
+    @Transactional
+    public AgendamentoResponse confirmarRealizacao(Long id, Long procedimentoIdConfirmado, LocalDate dataRealizacao) {
+        // Usa a consulta que já carrega paciente e procedimento
+        Agendamento agendamento = agendamentoRepository
+                .findByIdWithAssociations(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+
+        if (agendamento.getStatus() != StatusAgendamento.AGUARDANDO_REALIZACAO) {
+            throw new RuntimeException("Este agendamento não está aguardando realização");
+        }
+
+        Procedimento procedimento = agendamento.getProcedimento();
+        if (procedimento == null) {
+            if (procedimentoIdConfirmado == null) {
+                throw new RuntimeException("Procedimento não foi informado");
+            }
+            procedimento = procedimentoRepository
+                    .findById(procedimentoIdConfirmado)
+                    .orElseThrow(() -> new RuntimeException("Procedimento não encontrado"));
+        }
+
+        LocalDate dataFinal = dataRealizacao != null ? dataRealizacao : LocalDate.now();
+        LocalDate proximoContato = dataFinal.plusDays(procedimento.getIntervaloRetornoDias());
+
+        ProcedimentoPaciente procedimentoPaciente = ProcedimentoPaciente.builder()
+                .paciente(agendamento.getPaciente()) // paciente já carregado
+                .procedimento(procedimento)          // procedimento já carregado ou recém-buscado
+                .dataRealizacao(dataFinal)
+                .dataProximoContato(proximoContato)
+                .build();
+
+        procedimentoPaciente = procedimentoPacienteRepository.save(procedimentoPaciente);
+
+        agendamento.setProcedimento(procedimento);
+        agendamento.setProcedimentoPaciente(procedimentoPaciente);
+        agendamento.setStatus(StatusAgendamento.REALIZADO);
+
+        agendamentoRepository.save(agendamento);
+        return toResponse(agendamento);
+    }
+
 }

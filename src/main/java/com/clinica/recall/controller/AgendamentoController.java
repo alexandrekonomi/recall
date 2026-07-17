@@ -1,6 +1,7 @@
 package com.clinica.recall.controller;
 
 import com.clinica.recall.dto.request.CompletarAgendamentoRequest;
+import com.clinica.recall.dto.request.ConfirmarRealizacaoRequest;
 import com.clinica.recall.dto.response.AgendamentoResponse;
 import com.clinica.recall.service.AgendamentoService;
 import jakarta.validation.Valid;
@@ -36,5 +37,14 @@ public class AgendamentoController {
             @PathVariable Long id,
             @Valid @RequestBody CompletarAgendamentoRequest request) {
         return ResponseEntity.ok(agendamentoService.completar(id, request.getProcedimentoId(), request.getDataAgendada()));
+    }
+
+    @PatchMapping("/{id}/confirmar-realizacao")
+    @PreAuthorize("hasAnyRole('MEDICO', 'SECRETARIA')")
+    public ResponseEntity<AgendamentoResponse> confirmarRealizacao(
+            @PathVariable Long id,
+            @RequestBody ConfirmarRealizacaoRequest request) {
+        return ResponseEntity.ok(agendamentoService.confirmarRealizacao(
+                id, request.getProcedimentoId(), request.getDataRealizacao()));
     }
 }
