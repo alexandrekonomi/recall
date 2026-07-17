@@ -8,6 +8,8 @@ import com.clinica.recall.dto.response.PerfilPacienteResponse;
 import com.clinica.recall.dto.response.ProcedimentoPacienteResponse;
 import com.clinica.recall.repository.PacienteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -101,5 +103,16 @@ public class PacienteService {
                 .criadoEm(p.getCriadoEm())
                 .atualizadoEm(p.getAtualizadoEm())
                 .build();
+    }
+
+    public List<PacienteResponse> buscar(String termo) {
+        if (termo == null || termo.isBlank()) {
+            return List.of();
+        }
+        Pageable limite = PageRequest.of(0, 8);
+        return pacienteRepository.buscarPorNomeOuTelefone(termo, limite)
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 }

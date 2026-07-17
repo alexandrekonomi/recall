@@ -21,6 +21,13 @@ public class PacienteController {
 
     private final PacienteService pacienteService;
 
+
+    @GetMapping("/buscar")
+    @PreAuthorize("hasAnyRole('MEDICO', 'SECRETARIA')")
+    public ResponseEntity<List<PacienteResponse>> buscar(@RequestParam String termo) {
+        return ResponseEntity.ok(pacienteService.buscar(termo));
+    }
+
     @PostMapping
     @PreAuthorize("hasAnyRole('MEDICO', 'SECRETARIA')")
     public ResponseEntity<PacienteResponse> criar(@Valid @RequestBody PacienteRequest request) {
