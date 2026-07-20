@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,4 +26,19 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
             "WHERE a.status = :status " +
             "ORDER BY a.criadoEm ASC")
     List<Agendamento> findByStatusWithAssociations(@Param("status") StatusAgendamento status);
+
+    long countByStatusIn(List<StatusAgendamento> status);
+
+    @Query("""
+                SELECT COUNT(a) FROM Agendamento a
+                WHERE a.status = 'REALIZADO'
+                AND a.atualizadoEm >= :inicioMes
+            """)
+    long contarRealizadosMes(LocalDateTime inicioMes);
+
+    @Query("""
+                SELECT COUNT(a) FROM Agendamento a
+                WHERE a.criadoEm >= :inicioMes
+            """)
+    long contarTotalAgendadosMes(LocalDateTime inicioMes);
 }
