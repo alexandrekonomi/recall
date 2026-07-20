@@ -26,4 +26,13 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
     WHERE pp.data_proximo_contato <= CURRENT_DATE
 """, nativeQuery = true)
     BigDecimal calcularReceitaPotencial();
+
+    @Query("""
+    SELECT p FROM Paciente p
+    WHERE (LOWER(p.nome) LIKE LOWER(CONCAT('%', :busca, '%'))
+       OR p.telefone LIKE CONCAT('%', :busca, '%'))
+    AND p.ativo = true
+    ORDER BY p.nome ASC
+""")
+    List<Paciente> buscarPorNomeOuTelefone(String busca, org.springframework.data.domain.Pageable pageable);
 }

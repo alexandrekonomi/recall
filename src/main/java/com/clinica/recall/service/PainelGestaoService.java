@@ -1,6 +1,8 @@
 package com.clinica.recall.service;
 
+import com.clinica.recall.domain.enums.StatusAgendamento;
 import com.clinica.recall.dto.response.*;
+import com.clinica.recall.repository.AgendamentoRepository;
 import com.clinica.recall.repository.ContatoRepository;
 import com.clinica.recall.repository.PacienteRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class PainelGestaoService {
 
     private final PacienteRepository pacienteRepository;
     private final ContatoRepository contatoRepository;
+    private final AgendamentoRepository agendamentoRepository;
 
     @Transactional(readOnly = true)
     public PainelGestaoResponse buscarPainel() {
@@ -70,12 +73,25 @@ public class PainelGestaoService {
 
         BigDecimal receitaPotencial = pacienteRepository.calcularReceitaPotencial();
 
+        long agendamentosPendentes = agendamentoRepository.countByStatusIn(
+                List.of(StatusAgendamento.AGUARDANDO_DADOS, StatusAgendamento.AGUARDANDO_REALIZACAO)
+        );
+
+        long realizadosMes = agendamentoRepository.contarRealizadosMes(inicioMes);
+        long totalAgendadosMes = agendamentoRepository.contarTotalAgendadosMes(inicioMes);
+
+        long taxaComparecimento = totalAgendadosMes > 0
+                ? Math.round((realizadosMes * 100.0) / totalAgendadosMes)
+                : 0;
+
         return PainelGestaoResponse.builder()
                 .pacientesAtivos(pacientesAtivos)
                 .pacientesInativos(pacientesInativos)
                 .taxaRetornoMes(Math.round(taxaRetorno * 10) / 10.0)
                 .totalContatosMes(totalContatosMes)
                 .receitaPotencial(receitaPotencial)
+                .agendamentosPendentes(agendamentosPendentes)
+                .taxaComparecimentoMes(taxaComparecimento)
                 .contatosPorSemana(contatosPorSemana)
                 .distribuicaoResultados(distribuicao)
                 .procedimentosComMaiorAbandono(abandono)

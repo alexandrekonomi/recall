@@ -1,21 +1,16 @@
 package com.clinica.recall.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
-public class ProcedimentoPacienteRequest {
-
-    @NotNull
-    private Long pacienteId;
-
+public class CompletarAgendamentoRequest {
     @NotNull
     private Long procedimentoId;
 
     @NotNull
-    private LocalDate dataRealizacao;
+    private LocalDate dataAgendada;
 }

@@ -19,4 +19,6 @@ public class PainelGestaoResponse {
     private List<ContatosPorSemana> contatosPorSemana;
     private List<DistribuicaoResultado> distribuicaoResultados;
     private List<ProcedimentoAbandono> procedimentosComMaiorAbandono;
+    private long agendamentosPendentes;
+    private long taxaComparecimentoMes;
 }
