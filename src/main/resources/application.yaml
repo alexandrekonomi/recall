@@ -13,7 +13,7 @@ spring:
     locations: classpath:db/migration
 jwt:
   secret: "3cTk9pLmN7vQxRsWuYzAbCdEfGhJkMnOpQrStUvWxYz12345678901234567890"
-  expiration: 86400000
+  expiration: 7200000
 
 resend:
   api-key: re_DTdYxF9d_4FeVsdR55bKsfftf5v1iCbE8
