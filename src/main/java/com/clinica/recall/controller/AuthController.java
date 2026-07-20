@@ -5,13 +5,15 @@ import com.clinica.recall.dto.request.LoginRequest;
 import com.clinica.recall.dto.response.LoginResponse;
 import com.clinica.recall.repository.UsuarioRepository;
 import com.clinica.recall.security.JwtService;
+import com.clinica.recall.security.LoginAttemptService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -26,29 +28,33 @@ public class AuthController {
     private final UserDetailsService userDetailsService;
     private final JwtService jwtService;
     private final UsuarioRepository usuarioRepository;
+    private final LoginAttemptService loginAttemptService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+        String email = request.getEmail();
+
+        if (loginAttemptService.estaBloqueado(email)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body(Map.of("message", "Muitas tentativas incorretas. Tente novamente em alguns minutos."));
+        }
+
         try {
-
-            BCryptPasswordEncoder b = new BCryptPasswordEncoder();
-            String senha123 = b.encode("senha123");
-            System.out.println(senha123);
-
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getSenha())
+                    new UsernamePasswordAuthenticationToken(email, request.getSenha())
             );
-        } catch (Exception e) {
-            System.out.println("=== ERRO AUTH: " + e.getClass().getName() + " - " + e.getMessage());
+        } catch (BadCredentialsException e) {
+            loginAttemptService.registrarFalha(email);
             throw e;
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        Usuario usuario = usuarioRepository.findByEmail(request.getEmail()).orElseThrow();
+        loginAttemptService.registrarSucesso(email);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
 
         String token = jwtService.gerarToken(userDetails, Map.of("perfil", usuario.getPerfil().name()));
 
         return ResponseEntity.ok(new LoginResponse(token, usuario.getPerfil().name(), usuario.getNome()));
     }
-
 }
