@@ -12,12 +12,12 @@ spring:
     enabled: true
     locations: classpath:db/migration
 jwt:
-  secret: "3cTk9pLmN7vQxRsWuYzAbCdEfGhJkMnOpQrStUvWxYz12345678901234567890"
+  secret: ${JWT_SECRET}
   expiration: 7200000
 
 resend:
-  api-key: re_DTdYxF9d_4FeVsdR55bKsfftf5v1iCbE8
-  from-email: onboarding@resend.dev
+  api-key: ${RESEND_API_KEY}
+  from-email: ${RESEND_FROM_EMAIL:no-reply@envio.clubetenis.com.br}
   from-name: Recall
 
 app:
